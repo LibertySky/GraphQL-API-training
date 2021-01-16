@@ -8,10 +8,10 @@ const { graphqlHTTP } = require('express-graphql');
 const graphqlSchema = require('./graphql/schema');
 const graphqlResolver = require('./graphql/resolvers');
 
-// cors = require('cors');
+cors = require('cors');
 
 const app = express();
-// app.use(cors());
+app.use(cors());
 
 // file upload config
 const fileStorage = multer.diskStorage({

@@ -61,3 +61,31 @@ fetch('http://localhost:3021/graphql', {
 		Authorization: 'Bearer ' + this.props.token,
 	},
 });
+
+// GET posts
+const graphqlQuery = {
+	query: `
+		{
+			posts(page: ${page}) {
+				posts{
+					_id
+					title
+					content
+					creator {
+						name
+					}
+					createdAt
+				}
+				totalPosts
+			}
+		}
+	`,
+};
+fetch('http://localhost:3021/graphql', {
+	method: 'POST',
+	headers: {
+		Authorization: 'Bearer ' + this.props.token,
+		'Content-Type': 'application/json',
+	},
+	body: JSON.stringify(graphqlQuery),
+});

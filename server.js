@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const multer = require('multer');
+const auth = require('./middleware/auth');
 // GraphQL
 const { graphqlHTTP } = require('express-graphql');
 const graphqlSchema = require('./graphql/schema');
@@ -54,6 +55,9 @@ app.use((req, res, next) => {
 	}
 	next();
 });
+
+// auth middleware
+app.use(auth);
 
 // graphql route
 app.use(

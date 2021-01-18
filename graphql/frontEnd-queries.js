@@ -35,3 +35,29 @@ fetch('http://localhost:3021/graphql', {
 	},
 	body: JSON.stringify(graphqlQuery),
 });
+
+//create post
+let graphqlQuery = {
+	query: `
+	mutation {
+		createPost(postInput: {title: "${postData.title}", content: "${postData.content}", imageUrl: "${postData.imgUrl}"}) {
+			_id
+			title
+			content
+			imageUrl
+			creator {
+				name 
+			}
+			createdAt
+		}
+	}
+	
+	`,
+};
+fetch('http://localhost:3021/graphql', {
+	method: POST,
+	body: JSON.stringify(graphqlQuery),
+	headers: {
+		Authorization: 'Bearer ' + this.props.token,
+	},
+});

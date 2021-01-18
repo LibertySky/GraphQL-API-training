@@ -1,15 +1,18 @@
 const path = require('path');
+const fs = require('fs');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const auth = require('./middleware/auth');
+
 // GraphQL
 const { graphqlHTTP } = require('express-graphql');
 const graphqlSchema = require('./graphql/schema');
 const graphqlResolver = require('./graphql/resolvers');
 
-cors = require('cors');
+const cors = require('cors');
 
 const app = express();
 app.use(cors());
@@ -56,6 +59,19 @@ app.use((req, res, next) => {
 	next();
 });
 
+// images upload
+app.put('post-image', (req, res, next) => {
+	if (!req.file) {
+		return res.status(200).json({ message: 'No file provided' });
+	}
+	if (req.body.oldPath) {
+		clearImage(req.body.oldPath);
+	}
+	return res
+		.status(201)
+		.json({ message: 'File saved', filePath: req.file.path });
+});
+
 // auth middleware
 app.use(auth);
 
@@ -98,3 +114,10 @@ mongoose
 	.then(() => {
 		app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 	});
+
+const clearImage = (filePath) => {
+	filePath = path.join(__dirname, '..', filePath);
+	fs.unlink(filePath, (err) => {
+		// console.log(err);
+	});
+};
